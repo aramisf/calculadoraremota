@@ -23,11 +23,19 @@ logFP = open('log.txt', 'a')
 # Colocando os dados do arquivo texto em uma lista:
 l_host_port = [ i.strip() for i in hostFP.readlines() ]
 
+# Fechando arquivo e eliminando da memoria, pois nao sera mais usado.
+hostFP.close()
+del hostFP
+
 # Criando lista de hosts
 l_hosts = [ i.split()[0] for i in l_host_port ]
 
 # Criando lista de portas
 l_ports = [ i.split()[1] for i in l_host_port ]
+
+# Criando a tupla que acredito que simplificara nossas vidas:
+# l_t_ -> lista de tuplas
+l_t_HOST_PORT = [ ( i.split()[0], i.split()[1] ) for i in hostFP.readlines() ]
 
 
 #OBS: cada servidor tem q fazer o log no mesmo arquivo.
