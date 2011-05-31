@@ -23,8 +23,10 @@ class Cliente(object):
             2 - recebimento de mensagem
             3 - envio de mensagem
         '''
-        text1 = self.ME+"(em modo cliente) iniciando em: "+datetime.now().ctime()+"\n"
-        text2 = self.ME+"(cliente) enviando "+str(data)+" em: "+datetime.now().ctime()+"\n"
+        text1 = "\nIniciando "+self.ME+"(em modo cliente): "+datetime.now().ctime()+"\n"
+        text2 = self.ME+" (cliente) diz: recebi "+str(data)+" em: "+datetime.now().ctime()+"\n"
+        text3 = self.ME+" (cliente) diz: enviei "+str(data)+" em: "+datetime.now().ctime()+"\n"
+
         if msg == 1:
             # Inicia o log com a marcacao de tempo
             self.logFile.write(text1)
@@ -35,7 +37,7 @@ class Cliente(object):
 
         elif msg == 3:
             # Envio de dados:
-            self.logFile.write(text2)
+            self.logFile.write(text3)
 
         #else:
         #    pass
@@ -64,5 +66,6 @@ class Cliente(object):
             # TIMEOUT AQUI
             data = self.sock.recv(1024)
             self.log(2,data)
+            print "Recebi %s" % str(data)
 
 

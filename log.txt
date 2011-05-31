@@ -1,0 +1,71 @@
+
+Iniciando bowmore(em modo cliente): Tue May 31 04:26:04 2011
+bowmore (cliente) diz: enviei 8**5 em: Tue May 31 04:26:09 2011
+bowmore (cliente) diz: recebi 32768 em: Tue May 31 04:26:09 2011
+bowmore (cliente) diz: enviei 2**31 em: Tue May 31 04:26:16 2011
+bowmore (cliente) diz: recebi 2147483648 em: Tue May 31 04:26:16 2011
+bowmore (cliente) diz: enviei 4./3 em: Tue May 31 04:26:27 2011
+bowmore (cliente) diz: recebi 1.33333333333 em: Tue May 31 04:26:27 2011
+bowmore (cliente) diz: enviei 0*59 em: Tue May 31 04:26:35 2011
+bowmore (cliente) diz: recebi 0 em: Tue May 31 04:26:35 2011
+bowmore (cliente) diz: enviei 2**14 em: Tue May 31 04:26:45 2011
+bowmore (cliente) diz: recebi 16384 em: Tue May 31 04:26:45 2011
+
+Iniciando macalan em modo servidor: Tue May 31 04:25:58 2011
+macalan diz: Recebi 8**5: Tue May 31 04:26:09 2011
+macalan diz: Enviei 8**5: Tue May 31 04:26:09 2011
+macalan diz: Recebi 32768: Tue May 31 04:26:09 2011
+macalan diz: Enviei 32768: Tue May 31 04:26:09 2011
+macalan diz: Recebi 2**31: Tue May 31 04:26:16 2011
+macalan diz: Enviei 2**31: Tue May 31 04:26:16 2011
+macalan diz: Recebi 2147483648: Tue May 31 04:26:16 2011
+macalan diz: Enviei 2147483648: Tue May 31 04:26:16 2011
+macalan diz: Recebi 4./3: Tue May 31 04:26:27 2011
+macalan diz: Enviei 4./3: Tue May 31 04:26:27 2011
+macalan diz: Recebi 1.33333333333: Tue May 31 04:26:27 2011
+macalan diz: Enviei 1.33333333333: Tue May 31 04:26:27 2011
+macalan diz: Recebi 0*59: Tue May 31 04:26:35 2011
+macalan diz: Enviei 0*59: Tue May 31 04:26:35 2011
+macalan diz: Recebi 0: Tue May 31 04:26:35 2011
+macalan diz: Enviei 0: Tue May 31 04:26:35 2011
+macalan diz: Recebi 2**14: Tue May 31 04:26:45 2011
+macalan diz: Enviei 2**14: Tue May 31 04:26:45 2011
+macalan diz: Recebi 16384: Tue May 31 04:26:45 2011
+macalan diz: Enviei 16384: Tue May 31 04:26:45 2011
+macalan diz: Recebi : Tue May 31 04:26:47 2011
+
+Iniciando dalmore em modo servidor: Tue May 31 04:26:00 2011
+dalmore diz: Recebi 8**5: Tue May 31 04:26:09 2011
+dalmore diz: Enviei 8**5: Tue May 31 04:26:09 2011
+dalmore diz: Recebi 32768: Tue May 31 04:26:09 2011
+dalmore diz: Enviei 32768: Tue May 31 04:26:09 2011
+dalmore diz: Recebi 2**31: Tue May 31 04:26:16 2011
+dalmore diz: Enviei 2**31: Tue May 31 04:26:16 2011
+dalmore diz: Recebi 2147483648: Tue May 31 04:26:16 2011
+dalmore diz: Enviei 2147483648: Tue May 31 04:26:16 2011
+dalmore diz: Recebi 4./3: Tue May 31 04:26:27 2011
+dalmore diz: Enviei 4./3: Tue May 31 04:26:27 2011
+dalmore diz: Recebi 1.33333333333: Tue May 31 04:26:27 2011
+dalmore diz: Enviei 1.33333333333: Tue May 31 04:26:27 2011
+dalmore diz: Recebi 0*59: Tue May 31 04:26:35 2011
+dalmore diz: Enviei 0*59: Tue May 31 04:26:35 2011
+dalmore diz: Recebi 0: Tue May 31 04:26:35 2011
+dalmore diz: Enviei 0: Tue May 31 04:26:35 2011
+dalmore diz: Recebi 2**14: Tue May 31 04:26:45 2011
+dalmore diz: Enviei 2**14: Tue May 31 04:26:45 2011
+dalmore diz: Recebi 16384: Tue May 31 04:26:45 2011
+dalmore diz: Enviei 16384: Tue May 31 04:26:45 2011
+dalmore diz: Recebi : Tue May 31 04:26:47 2011
+
+Iniciando talisker em modo servidor: Tue May 31 04:26:02 2011
+talisker diz: Recebi 8**5: Tue May 31 04:26:09 2011
+talisker diz: Enviei 32768: Tue May 31 04:26:09 2011
+talisker diz: Recebi 2**31: Tue May 31 04:26:16 2011
+talisker diz: Enviei 2147483648: Tue May 31 04:26:16 2011
+talisker diz: Recebi 4./3: Tue May 31 04:26:27 2011
+talisker diz: Enviei 1.33333333333: Tue May 31 04:26:27 2011
+talisker diz: Recebi 0*59: Tue May 31 04:26:35 2011
+talisker diz: Enviei 0: Tue May 31 04:26:35 2011
+talisker diz: Recebi 2**14: Tue May 31 04:26:45 2011
+talisker diz: Enviei 16384: Tue May 31 04:26:45 2011
+talisker diz: Recebi : Tue May 31 04:26:47 2011

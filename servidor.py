@@ -28,9 +28,10 @@ class Servidor(object):
             2 - recebimento de mensagem
             3 - envio de mensagem
         '''
-        text1 = "Iniciando "+self.ME+" em modo servidor, hora local:"+datetime.now().ctime()+"\n"
-        text2 = self.ME+" diz: Enviando "+str(self.DATA)+", hora local:"+datetime.now().ctime()+"\n"
-        text3 = self.ME+" diz: Recebendo "+str(self.DATA)+", hora local:"+datetime.now().ctime()+"\n"
+        text1 = "\nIniciando "+self.ME+" em modo servidor: "+datetime.now().ctime()+"\n"
+        text2 = self.ME+" diz: Recebi "+str(self.DATA)+": "+datetime.now().ctime()+"\n"
+        text3 = self.ME+" diz: Enviei "+str(self.DATA)+": "+datetime.now().ctime()+"\n"
+
         if msg == 1:
             # Inicia o log com a marcacao de tempo:
             self.logFile.write(text1)
@@ -90,16 +91,26 @@ class Servidor(object):
             if self.INDICE == (self.MAX_HOSTS - 1):
 
                 self.escuta(self.clientConn[0])
+                print "Avaliando"
                 self.DATA = str(eval(self.DATA))
                 self.fala(self.clientConn[0])
+                print "falei %s" % self.DATA
+
 
             else:
 
                 self.escuta(self.clientConn[0])
+                print "Escutei '%s'" % self.DATA
                 if not self.DATA: break
+
                 self.fala(self.sock_servidor)
+                print "enviei '%s'...no aguardo" % self.DATA
+
                 self.escuta(self.sock_servidor)
+                print "Escutei2 '%s'" % self.DATA
+                if not self.DATA: break
                 self.fala(self.clientConn[0])
+                print "enviei '%s' ...no aguardo2" % self.DATA
 
 
     def conecta_caso_1(self):
@@ -153,7 +164,6 @@ class Servidor(object):
         self.sock_cliente.bind(('', PORTA_ESCUTA))
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
-        print "ClienConn",self.clientConn[1]
 
         # Conecta com o Servidor:
         MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
@@ -171,7 +181,7 @@ class Servidor(object):
         HOST = self.l_hosts[-2]
         PORT = self.l_ports[-1]
 
-        print "Meu host %s" % HOST
+        print "Meu cliente %s" % HOST
         print "Porta de escuta: %d" % PORT
         # Conecta com o cliente:
         self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
