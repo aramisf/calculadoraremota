@@ -3,10 +3,10 @@
 
 # servidor.py
 
-import socket, time 
+import socket, time
 from datetime import datetime
 
-class Servidor(object)
+class Servidor(object):
 
     def __init__(self,ME,MINHA_PORTA,l_hosts,l_ports,logFP):
 
@@ -16,6 +16,7 @@ class Servidor(object)
         self.PORT = MINHA_PORTA
         self.INDICE = l_hosts.index(self.ME)
         self.MAX_HOSTS = len(l_hosts)
+        self.logFile = logFP
 
 
     def log(self,msg,data):
@@ -27,15 +28,15 @@ class Servidor(object)
         '''
         if msg == 1:
             # Inicia o log com a marcacao de tempo:
-            logFP.write("Iniciando %s em modo servidor, hora local:"+datetime.now().ctime()+"\n" % self.ME)
+            self.logFile.write("Iniciando %s em modo servidor, hora local:"+datetime.now().ctime()+"\n" % self.ME)
 
         elif msg == 2:
             # Recebimento de dados:
-            logFP.write("%s diz: Enviando %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
+            self.logFile.write("%s diz: Enviando %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
 
         elif msg == 3:
             # Envio de dados:
-            logFP.write("%s diz: Recebendo %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
+            self.logFile.write("%s diz: Recebendo %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
 
 
 

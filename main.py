@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 #-*- encoding: utf-8 -*-
 
-# cliente.py
+# main.py
 
-import os, socket, time, sys
-import struct, re
-
+import socket, sys
 from datetime import datetime
-from threading import Thread
 
 # Confere argumentos:
 if len(sys.argv) != 2:
@@ -31,11 +28,11 @@ del hostFP
 l_hosts = [ i.split()[0] for i in l_host_port ]
 
 # Criando lista de portas
-l_ports = [ i.split()[1] for i in l_host_port ]
+l_ports = [ int(i.split()[1]) for i in l_host_port ]
 
 # Criando a tupla que acredito que simplificara nossas vidas:
 # l_t_ -> lista de tuplas
-l_t_HOST_PORT = [ ( i.split()[0], i.split()[1] ) for i in hostFP.readlines() ]
+l_t_HOST_PORT = [ ( i.split()[0], int(i.split()[1]) ) for i in l_host_port ]
 
 
 # OBS: cada servidor tem q fazer o log no mesmo arquivo.
@@ -51,13 +48,13 @@ if ME in l_hosts:
     MINHA_PORTA = l_ports[l_hosts.index(ME)]
 
     # Iniciando o servidor
-    import servidor
+    from servidor import *
     servidor = Servidor(ME,MINHA_PORTA,l_hosts,l_ports,logFP)
     servidor.start()
 
 else:
     # Inicia o cliente:
-    import cliente
+    from cliente import *
     cliente = Cliente(ME,l_hosts,l_ports,logFP)
     cliente.start()
 

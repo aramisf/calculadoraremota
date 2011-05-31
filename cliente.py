@@ -3,18 +3,17 @@
 
 # cliente.py
 
-import os, socket, time, sys
-import struct, re
-
+import socket, time
 from datetime import datetime
-from threading import Thread
 
 class Cliente(object):
 
     def __init__(self,ME,l_hosts,l_ports,logFP):
 
-        self.HOST = l_host[0]
-        self.PORT = l_ports[0]
+        self.HOST = l_hosts[0]
+        self.PORT = int(l_ports[0])
+        self.logFile = logFP
+        self.ME = ME
 
 
     def log(self,msg,data=None):
@@ -24,20 +23,22 @@ class Cliente(object):
             2 - recebimento de mensagem
             3 - envio de mensagem
         '''
+        text1 = self.ME+"(em modo cliente) iniciando em:"+datetime.now().ctime()+"\n"
+        text2 = self.ME+"(cliente) enviando "+str(data)+" em:"+datetime.now().ctime()+"\n"
         if msg == 1:
             # Inicia o log com a marcacao de tempo
-            logFP.write("%s (em modo cliente) iniciando em:"+datetime.now().ctime()+"\n" % ME)
+            self.logFile.write(text1)
 
         elif msg == 2:
             # Recebimento de dados:
-            logFP.write("%s (cliente) enviando %s em:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
+            self.logFile.write(text2)
 
         elif msg == 3:
             # Envio de dados:
-            logFP.write("%s (cliente) recebendo %s em:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
+            self.logFile.write(text2)
 
-        else:
-            pass
+        #else:
+        #    pass
 
 
     def start(self):
