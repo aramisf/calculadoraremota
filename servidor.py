@@ -1,31 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, socket, time, sys
-import struct, re
+# servidor.py
 
+import socket, time 
 from datetime import datetime
-from threading import Thread
 
 class Servidor(object)
-
 
     def __init__(self,ME,MINHA_PORTA,l_hosts,l_ports,logFP):
 
         self.ME = ME
-        self.HOST = ME
+        #self.HOST = ME
+        self.DATA = ''
         self.PORT = MINHA_PORTA
-        self.INDICE = l_hosts.index(ME)
+        self.INDICE = l_hosts.index(self.ME)
         self.MAX_HOSTS = len(l_hosts)
-
-        if self.INDICE == 0:
-            self.caso_1()
-
-        elif self.INDICE == (self.MAX_HOSTS - 1):
-            self.caso_3()
-
-        else:
-            self.caso_2()
 
 
     def log(self,msg,data):
@@ -36,57 +26,83 @@ class Servidor(object)
             3 - envio de mensagem
         '''
         if msg == 1:
-            # Inicia o log com a marcacao de tempo
-            clientFP.write("%s iniciando, hora local:"+datetime.now().ctime()+"\n" % ME)
+            # Inicia o log com a marcacao de tempo:
+            logFP.write("Iniciando %s em modo servidor, hora local:"+datetime.now().ctime()+"\n" % self.ME)
 
         elif msg == 2:
             # Recebimento de dados:
-            clientFP.write("%s(cliente) enviando %s, hora local:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
+            logFP.write("%s diz: Enviando %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
 
         elif msg == 3:
             # Envio de dados:
-            clientFP.write("%s(cliente) recebendo %s, hora local:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
-
-        else:
+            logFP.write("%s diz: Recebendo %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
 
 
-    def fala(self,DATA):
+
+    def fala(self,para_onde):
+
+        # Enviando dados e armazenando no log:
+        para_onde.send(self.DATA)
+        self.log(3,self.DATA)
 
 
-        while True:
+    def escuta(self, de_onde):
 
-            # Enviando dados e armazenando no log:
-            self.sock.send(DATA)
-            self.log(3,DATA)
+        # Recebe os dados.
+        self.DATA = de.recv(1024)
 
-            # Recebendo confirmacao de recebimento pelo servidor e atualizando o
-            # log
-            data = s.recv(1024)
-            self.log(2,DATA)
+        # Esse if pode tirar, pq nao ta dentro de loop nenhum:
+        #if not self.DATA: break
+        self.log(2,self.DATA)
 
-
-    def escuta(self,DATA):
-
-        self.sock_escuta = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_escuta.bind((HOST, PORT))
-        self.sock_escuta.listen(3)
-        conn, addr = s.accept()
+        #self.sock_escuta = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.sock_escuta.bind((HOST, PORT))
+        #self.sock_escuta.listen(3)
+        #conn, addr = s.accept()
 
 
     def start(self):
 
         self.log(1)
 
-        # Abrindo um socket
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((self.HOST, self.PORT))
+        # Abrindo um socket ### Tira isso daqui, abre as conexoes apenas com os
+        # caras certos, depois de ter identificado qual o tipo do servidor.
+        #self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.sock.connect((self.HOST, self.PORT))
+
+        if self.INDICE == 0:
+            self.conecta_caso_1()
+
+        elif self.INDICE == (self.MAX_HOSTS - 1):
+            self.conecta_caso_3()
+
+        else:
+            self.conecta_caso_2()
 
         while True:
 
+            # Caso 3 possui uma unica conexao (1 cliente, 0 servidor):
+            if self.INDICE == (self.MAX_HOSTS - 1):
+
+                self.escuta(self.clientConn)
+                self.DATA = eval(self.DATA)
+                self.fala(self.clientConn)
+
+            else:
+
+                self.escuta(self.clientConn)
+                self.fala(self.sock_servidor)
+                self.escuta(self.sock_servidor)
+                self.fala(self.clientConn)
 
 
-    def caso_1(self):
+    def conecta_caso_1(self):
+        ''' Caso 1 eh quando o servidor eh o 1o da lista, ou seja, ele deve
+        esperar uma conexao vinda de uma maquina qualquer, portanto, ele nao
+        define um cliente, apenas um servidor ao qual se conectar.
+        '''
 
+        # Definindo caracteristicas da conexao do servidor:
         HOST = ''
         PORT = self.l_ports[0]
 
@@ -104,7 +120,12 @@ class Servidor(object)
         self.sock_servidor.connect((MEU_SERVIDOR, PORTA_DELE))
 
 
-    def caso_2(self):
+    def conecta_caso_2(self):
+        ''' Caso 2 eh quando uma maquina nao eh a 1a da lista, mas uma maquina
+        entre a segunda e a penultima da lista. Entao sao necessarias duas
+        conexoes, uma com o cliente e outra com o servidor da maquina onde o
+        programa esta em execucao.
+        '''
 
         # Informacoes para conectar com o cliente:
         MEU_CLIENTE = self.l_hosts[self.l_hosts.index(self.ME)-1]
@@ -128,7 +149,10 @@ class Servidor(object)
         self.sock_servidor.connect((MEU_SERVIDOR, PORTA_FALA))
 
 
-    def caso_3(self):
+    def conecta_caso_3(self):
+        ''' Caso 3 eh quando o servidor eh o ultimo, ele vai apenas ouvir na
+        porta dele, efetuar a operacao matematica e devolver o resultado.
+        '''
 
         HOST = self.l_hosts[-2]
         PORT = self.l_ports[-1]
@@ -139,27 +163,9 @@ class Servidor(object)
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
 
-        while 1:
-            # Recebe os dados;
-            DATA = self.clientConn.recv(1024)
-            if not DATA: break
-            self.log(2,DATA)
-
-            # Faz o calculo:
-            DATA = eval(DATA)
-
-            # Devolve o resultado
-            self.clientConn.send(DATA)
-            self.log(3,DATA)
-
 
 
 ###########################################
-# Log - Client File Pointer
-servFP = open('servidor.log', 'w')
-
-# Inicia o log com a marcacao de tempo
-servFP.write("Servidor, hora local: "+datetime.now().ctime()+"\n")
 
 HOST = ''                 # Symbolic name meaning the local host
 PORT = 50007              # Arbitrary non-privileged port
@@ -175,5 +181,4 @@ while 1:
     data = "Ok\n"
     conn.send(data)
 conn.close()
-#-*- encoding: utf-8 -*-
 
