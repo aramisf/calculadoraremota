@@ -17,7 +17,7 @@ class Cliente(object):
         self.PORT = l_ports[0]
 
 
-    def log(self,msg,data):
+    def log(self,msg,data=None):
 
         ''' diferentes niveis de log:
             1 - inicio
@@ -26,17 +26,18 @@ class Cliente(object):
         '''
         if msg == 1:
             # Inicia o log com a marcacao de tempo
-            logFP.write("%s iniciando, hora local:"+datetime.now().ctime()+"\n" % ME)
+            logFP.write("%s (em modo cliente) iniciando em:"+datetime.now().ctime()+"\n" % ME)
 
         elif msg == 2:
             # Recebimento de dados:
-            logFP.write("%s(cliente) enviando %s, hora local:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
+            logFP.write("%s (cliente) enviando %s em:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
 
         elif msg == 3:
             # Envio de dados:
-            logFP.write("%s(cliente) recebendo %s, hora local:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
+            logFP.write("%s (cliente) recebendo %s em:"+datetime.now().ctime()+"\n" % (ME,str(data)) )
 
         else:
+            pass
 
 
     def start(self):
@@ -45,6 +46,8 @@ class Cliente(object):
 
         # Abrindo um socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Criando conexao:
         self.sock.connect((self.HOST, self.PORT))
 
         while True:
