@@ -38,11 +38,13 @@ l_ports = [ i.split()[1] for i in l_host_port ]
 l_t_HOST_PORT = [ ( i.split()[0], i.split()[1] ) for i in hostFP.readlines() ]
 
 
-#OBS: cada servidor tem q fazer o log no mesmo arquivo.
+# OBS: cada servidor tem q fazer o log no mesmo arquivo.
 
 # Identificando maquina local: (gethostname retorna uma string)
 ME = socket.gethostname()
 
+# Se for um dos hosts da lista, entao roda o servidor, caso contrario, roda em
+# modo cliente com interface para usuario humano.
 if ME in l_hosts:
 
     # Encontrando a porta desta maquina
@@ -59,4 +61,6 @@ else:
     cliente = Cliente(ME,l_hosts,l_ports,logFP)
     cliente.start()
 
+# Fechando arquivo
+logFP.close()
 
