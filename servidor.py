@@ -21,16 +21,16 @@ class Servidor(object):
         self.l_ports = l_ports
 
 
-    def log(self,msg,data):
+    def log(self,msg):
 
         ''' diferentes niveis de log:
             1 - inicio
             2 - recebimento de mensagem
             3 - envio de mensagem
         '''
-        text1 = "Iniciando %s em modo servidor, hora local:"+datetime.now().ctime()+"\n"
-        text2 = self.ME+" diz: Enviando "+str(data)+", hora local:"+datetime.now().ctime()+"\n"
-        text3 = self.ME+" diz: Recebendo "+str(data)+", hora local:"+datetime.now().ctime()+"\n"
+        text1 = "Iniciando "+self.ME+" em modo servidor, hora local:"+datetime.now().ctime()+"\n"
+        text2 = self.ME+" diz: Enviando "+str(self.DATA)+", hora local:"+datetime.now().ctime()+"\n"
+        text3 = self.ME+" diz: Recebendo "+str(self.DATA)+", hora local:"+datetime.now().ctime()+"\n"
         if msg == 1:
             # Inicia o log com a marcacao de tempo:
             self.logFile.write(text1)
@@ -44,21 +44,21 @@ class Servidor(object):
             self.logFile.write(text3)
 
 
-    def fala(self,para_onde):
+    def fala(self,para_onde): # para_onde eh um socket
 
         # Enviando dados e armazenando no log:
         para_onde.send(self.DATA)
-        self.log(3,self.DATA)
+        self.log(3)
 
 
-    def escuta(self, de_onde):
+    def escuta(self, de_onde): # de_onde eh um socket
 
         # Recebe os dados.
         self.DATA = de_onde.recv(1024)
 
         # Esse if pode tirar, pq nao ta dentro de loop nenhum:
         #if not self.DATA: break
-        self.log(2,self.DATA)
+        self.log(2)
 
         #self.sock_escuta = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #self.sock_escuta.bind((HOST, PORT))
@@ -68,7 +68,7 @@ class Servidor(object):
 
     def start(self):
 
-        self.log(1,self.DATA)
+        self.log(1)
 
         # Abrindo um socket ### Tira isso daqui, abre as conexoes apenas com os
         # caras certos, depois de ter identificado qual o tipo do servidor.
@@ -89,16 +89,17 @@ class Servidor(object):
             # Caso 3 possui uma unica conexao (1 cliente, 0 servidor):
             if self.INDICE == (self.MAX_HOSTS - 1):
 
-                self.escuta(self.clientConn)
-                self.DATA = eval(self.DATA)
-                self.fala(self.clientConn)
+                self.escuta(self.clientConn[0])
+                self.DATA = str(eval(self.DATA))
+                self.fala(self.clientConn[0])
 
             else:
 
-                self.escuta(self.clientConn)
+                self.escuta(self.clientConn[0])
+                if not self.DATA: break
                 self.fala(self.sock_servidor)
                 self.escuta(self.sock_servidor)
-                self.fala(self.clientConn)
+                self.fala(self.clientConn[0])
 
 
     def conecta_caso_1(self):
@@ -152,6 +153,7 @@ class Servidor(object):
         self.sock_cliente.bind(('', PORTA_ESCUTA))
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
+        print "ClienConn",self.clientConn[1]
 
         # Conecta com o Servidor:
         MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
