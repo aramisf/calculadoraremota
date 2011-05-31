@@ -23,8 +23,8 @@ class Cliente(object):
             2 - recebimento de mensagem
             3 - envio de mensagem
         '''
-        text1 = self.ME+"(em modo cliente) iniciando em:"+datetime.now().ctime()+"\n"
-        text2 = self.ME+"(cliente) enviando "+str(data)+" em:"+datetime.now().ctime()+"\n"
+        text1 = self.ME+"(em modo cliente) iniciando em: "+datetime.now().ctime()+"\n"
+        text2 = self.ME+"(cliente) enviando "+str(data)+" em: "+datetime.now().ctime()+"\n"
         if msg == 1:
             # Inicia o log com a marcacao de tempo
             self.logFile.write(text1)

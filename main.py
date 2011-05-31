@@ -46,17 +46,16 @@ if ME in l_hosts:
 
     # Encontrando a porta desta maquina
     MINHA_PORTA = l_ports[l_hosts.index(ME)]
-
     # Iniciando o servidor
-    from servidor import *
-    servidor = Servidor(ME,MINHA_PORTA,l_hosts,l_ports,logFP)
-    servidor.start()
+    import servidor
+    meuServ = servidor.Servidor(ME,MINHA_PORTA,l_hosts,l_ports,logFP)
+    meuServ.start()
 
 else:
     # Inicia o cliente:
-    from cliente import *
-    cliente = Cliente(ME,l_hosts,l_ports,logFP)
-    cliente.start()
+    import cliente
+    meuCliente = cliente.Cliente(ME,l_hosts,l_ports,logFP)
+    meuCliente.start()
 
 # Fechando arquivo
 logFP.close()

@@ -17,6 +17,8 @@ class Servidor(object):
         self.INDICE = l_hosts.index(self.ME)
         self.MAX_HOSTS = len(l_hosts)
         self.logFile = logFP
+        self.l_hosts = l_hosts
+        self.l_ports = l_ports
 
 
     def log(self,msg,data):
@@ -26,18 +28,20 @@ class Servidor(object):
             2 - recebimento de mensagem
             3 - envio de mensagem
         '''
+        text1 = "Iniciando %s em modo servidor, hora local:"+datetime.now().ctime()+"\n"
+        text2 = self.ME+" diz: Enviando "+str(data)+", hora local:"+datetime.now().ctime()+"\n"
+        text3 = self.ME+" diz: Recebendo "+str(data)+", hora local:"+datetime.now().ctime()+"\n"
         if msg == 1:
             # Inicia o log com a marcacao de tempo:
-            self.logFile.write("Iniciando %s em modo servidor, hora local:"+datetime.now().ctime()+"\n" % self.ME)
+            self.logFile.write(text1)
 
         elif msg == 2:
             # Recebimento de dados:
-            self.logFile.write("%s diz: Enviando %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
+            self.logFile.write(text2)
 
         elif msg == 3:
             # Envio de dados:
-            self.logFile.write("%s diz: Recebendo %s, hora local:"+datetime.now().ctime()+"\n" % (self.ME,str(data)) )
-
+            self.logFile.write(text3)
 
 
     def fala(self,para_onde):
@@ -50,7 +54,7 @@ class Servidor(object):
     def escuta(self, de_onde):
 
         # Recebe os dados.
-        self.DATA = de.recv(1024)
+        self.DATA = de_onde.recv(1024)
 
         # Esse if pode tirar, pq nao ta dentro de loop nenhum:
         #if not self.DATA: break
@@ -64,7 +68,7 @@ class Servidor(object):
 
     def start(self):
 
-        self.log(1)
+        self.log(1,self.DATA)
 
         # Abrindo um socket ### Tira isso daqui, abre as conexoes apenas com os
         # caras certos, depois de ter identificado qual o tipo do servidor.
@@ -117,6 +121,8 @@ class Servidor(object):
         MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
         PORTA_DELE = self.l_ports[self.l_hosts.index(self.ME)+1]
 
+        print "Meu host %s" % MEU_SERVIDOR
+        print "Porta de fala: %d" % PORTA_DELE
         self.sock_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock_servidor.connect((MEU_SERVIDOR, PORTA_DELE))
 
@@ -136,9 +142,14 @@ class Servidor(object):
         MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
         PORTA_FALA = self.l_ports[self.l_hosts.index(self.ME)+1]
 
+        print "Meu cliente %s" % MEU_CLIENTE
+        print "Porta de escuta: %d" % PORTA_ESCUTA
+        print "Meu host %s" % MEU_SERVIDOR
+        print "Porta de fala: %d" % PORTA_FALA
         # Conecta com o cliente:
         self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_cliente.bind((MEU_CLIENTE, PORTA_ESCUTA))
+        #self.sock_cliente.bind((MEU_CLIENTE, PORTA_ESCUTA))
+        self.sock_cliente.bind(('', PORTA_ESCUTA))
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
 
@@ -158,28 +169,31 @@ class Servidor(object):
         HOST = self.l_hosts[-2]
         PORT = self.l_ports[-1]
 
+        print "Meu host %s" % HOST
+        print "Porta de escuta: %d" % PORT
         # Conecta com o cliente:
         self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_cliente.bind((HOST, PORT))
+        #self.sock_cliente.bind((HOST, PORT))
+        self.sock_cliente.bind(('', PORT))
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
 
 
 
 ###########################################
-
-HOST = ''                 # Symbolic name meaning the local host
-PORT = 50007              # Arbitrary non-privileged port
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
-s.listen(1)
-conn, addr = s.accept()
-print 'Connected by', addr
-while 1:
-    data = conn.recv(1024)
-    if not data: break
-    print "Recebi: %s" % str(data)
-    data = "Ok\n"
-    conn.send(data)
-conn.close()
-
+#
+#   HOST = ''                 # Symbolic name meaning the local host
+#   PORT = 50007              # Arbitrary non-privileged port
+#   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#   s.bind((HOST, PORT))
+#   s.listen(1)
+#   conn, addr = s.accept()
+#   print 'Connected by', addr
+#   while 1:
+#       data = conn.recv(1024)
+#       if not data: break
+#       print "Recebi: %s" % str(data)
+#       data = "Ok\n"
+#       conn.send(data)
+#   conn.close()
+#
