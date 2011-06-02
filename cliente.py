@@ -34,9 +34,10 @@ class Cliente(object):
         text3 = self.ME+" diz: recebi "+str(data)+" de "+self.HOST+" em: "+datetime.now().ctime()+"\n"
         text4 = self.ME+" diz: enviei "+str(data)+" para "+self.HOST+" em: "+datetime.now().ctime()+"\n"
         text5 = self.ME+" diz: estouro de timeout ao conectar-se com "+self.HOST+": "+datetime.now().ctime()+"\n"
-        text6 = self.ME+" diz: conectei-me a "+self.HOST+" em: "+datetime.now().ctime()+"\n"
+        text6 = self.ME+" diz: conectei-me a outra ponta em: "+datetime.now().ctime()+"\n"
         text7 = self.ME+" diz: desligando em: "+datetime.now().ctime()+" flws \o\n"
         text8 = self.ME+" diz: servidor aparenta estar desconectado: "+datetime.now().ctime()+"\n"
+        text9 = self.ME+" enviando mensagem de teste para o servidor final.\n"
 
         if msg == 1:
             # Inicia o log com a marcacao de tempo
@@ -70,6 +71,10 @@ class Cliente(object):
             # Envio de dados:
             self.logFile.write(text8)
 
+        elif msg == 9:
+            # Envio de dados:
+            self.logFile.write(text9)
+
 
     def start(self):
 
@@ -91,7 +96,7 @@ class Cliente(object):
             exit(2)
 
         # Reajustando o timeout, para falar com o servidor:
-        self.sock.settimeout(3.)
+        self.sock.settimeout(5.)
 
 
         # Enviando uma mensagem teste para a outra ponta da conexao, se vier
@@ -106,19 +111,36 @@ class Cliente(object):
                 # Enviando dados e armazenando no log:
                 self.sock.send(data)
                 print "Enviei msg teste para a outra ponta"
-
-                # Aguardando resposta da outra ponta:
-                data = self.sock.recv(1024)
+                self.log(9)
 
                 # Validando a resposta:
-                if data == 'Opa, eh nois!':
-                    print "Conexao efetuada com sucesso"
-                    self.log(6)
-                    break
-
             except socket.timeout:
                 print "%do estouro de timeout no envio da mensagem teste" % i+1
                 self.log(6)
+
+            except socket.error:
+                print "Meu servidor caiu 3"
+                self.log(8)
+                exit(1)
+
+            # Se rolou de enviar, agora recebe os dados e analiza
+            try:
+                data = self.sock.recv(1024)
+
+            except socket.error:
+                print "Conexao perdida"
+                self.log(8)
+                exit(1)
+
+            if data == 'Opa, eh nois!':
+                print "Conexao efetuada com sucesso"
+                self.log(6)
+                break
+
+            elif data == '':
+                print "Meu servidor caiu 2"
+                self.log(8)
+                exit(1)
 
 
 
@@ -126,14 +148,28 @@ class Cliente(object):
         while True:
 
             # Recebendo dados do usuario:
-            data = raw_input("Digite a expressao matematica: ")
+            data = raw_input("Digite a expressao aritmetica: ")
 
             # Enviando dados e armazenando no log:
-            self.sock.send(data)
-            self.log(4,data)
+            try:
+                self.sock.send(data)
+                self.log(4,data)
+
+            except socket.error:
+                print "Meu servidor caiu 4"
+                self.log(8)
+                exit(1)
 
             # Recebendo dados do servidor e atualizando o log
+#            try:
             data = self.sock.recv(1024)
             print "R: %s" % str(data)
             self.log(3,data)
+
+#            except socket.error:
+#                print "Meu servidor caiu 5"
+#                self.log(8)
+#                exit(1)
+# 
+
 
