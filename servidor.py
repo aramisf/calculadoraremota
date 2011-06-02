@@ -31,6 +31,7 @@ class Servidor(object):
         text1 = "\nIniciando "+self.ME+" em modo servidor: "+datetime.now().ctime()+"\n"
         text2 = self.ME+" diz: Recebi "+str(self.DATA)+": "+datetime.now().ctime()+"\n"
         text3 = self.ME+" diz: Enviei "+str(self.DATA)+": "+datetime.now().ctime()+"\n"
+        text4 = self.ME+" confirmando teste de conexao com o cliente: "+datetime.now().ctime()+"\n"
 
         if msg == 1:
             # Inicia o log com a marcacao de tempo:
@@ -44,12 +45,20 @@ class Servidor(object):
             # Envio de dados:
             self.logFile.write(text3)
 
+        elif msg == 4:
+            # Envio de dados:
+            self.logFile.write(text4)
 
-    def fala(self,para_onde): # para_onde eh um socket
+
+    def fala(self,para_onde,cliente=0): # para_onde eh um socket
 
         # Enviando dados e armazenando no log:
         para_onde.send(self.DATA)
-        self.log(3)
+        if cliente == 1:
+            self.log(4)
+
+        else:
+            self.log(3)
 
 
     def escuta(self, de_onde): # de_onde eh um socket
@@ -90,25 +99,49 @@ class Servidor(object):
             # Caso 3 possui uma unica conexao (1 cliente, 0 servidor):
             if self.INDICE == (self.MAX_HOSTS - 1):
 
+                # Recebe os dados
                 self.escuta(self.clientConn[0])
-                print "Avaliando"
-                self.DATA = str(eval(self.DATA))
-                self.fala(self.clientConn[0])
-                print "falei %s" % self.DATA
+
+                # Verifica se eh mensagem de teste de conexao do cliente e
+                # responde que ta on:
+                if self.DATA == 'Iae vei? Firmeza?':
+                    self.DATA = 'Opa, eh nois!'
+
+                    # Um parametro a mais, para enviar para o log que a mensagem
+                    # teste esta sendo enviada:
+                    self.fala(self.clientConn[0],1)
+
+                # Se nao for uma mensagem teste, avalia a expressao matematica:
+                else:
+                    print "Avaliando..."
+
+                    try:
+                        self.DATA = str(eval(self.DATA))
+
+                    except:
+                        self.DATA = 'Tem q ser uma expressao aritmetica em python, apenas com numeros'
+
+                    self.fala(self.clientConn[0])
+                    print "falei %s" % self.DATA
 
 
             else:
 
+                # Escuta da maquina anterior:
                 self.escuta(self.clientConn[0])
                 print "Escutei '%s'" % self.DATA
                 if not self.DATA: break
 
+                # Fala para a proxima maquina:
                 self.fala(self.sock_servidor)
                 print "enviei '%s'...no aguardo" % self.DATA
 
+                # Aguarda resposta:
                 self.escuta(self.sock_servidor)
                 print "Escutei2 '%s'" % self.DATA
                 if not self.DATA: break
+
+                # Envia resposta
                 self.fala(self.clientConn[0])
                 print "enviei '%s' ...no aguardo2" % self.DATA
 
@@ -190,22 +223,3 @@ class Servidor(object):
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
 
-
-
-###########################################
-#
-#   HOST = ''                 # Symbolic name meaning the local host
-#   PORT = 50007              # Arbitrary non-privileged port
-#   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#   s.bind((HOST, PORT))
-#   s.listen(1)
-#   conn, addr = s.accept()
-#   print 'Connected by', addr
-#   while 1:
-#       data = conn.recv(1024)
-#       if not data: break
-#       print "Recebi: %s" % str(data)
-#       data = "Ok\n"
-#       conn.send(data)
-#   conn.close()
-#
