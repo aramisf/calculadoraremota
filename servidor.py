@@ -35,7 +35,8 @@ class Servidor(object):
         text4 = self.ME+" confirmando teste de conexao com o cliente: "+datetime.now().ctime()+"\n"
         text5 = self.ME+" meu servidor (%s) parece estar desconectado. "%str(maq)+datetime.now().ctime()+"\n"
         text6 = self.ME+" -> Desligando...\n"
-        text7 = self.ME+" repassando mensagem de teste\n"
+        text7 = self.ME+" repassando mensagem de teste (ida)\n"
+        text8 = self.ME+" repassando mensagem de teste (volta)\n"
 
         if msg == 1:
             # Inicia o log com a marcacao de tempo:
@@ -73,12 +74,19 @@ class Servidor(object):
             para_onde.send(self.DATA)
             #self.DATA = para_onde.recv(1024)
             if self.DATA:
+
                 # Conforme a mensagem, registra um log diferente:
+                # Para registrar sucesso na conexao:
                 if cliente == 1:
                     self.log(4)
 
+                # Para registrar mensagem de teste na ida:
                 elif cliente == 2:
                     self.log(7)
+
+                # Para registrar mensagem de teste na volta:
+                elif cliente == 3:
+                    self.log(8)
 
                 else:
                     self.log(3)
@@ -154,7 +162,7 @@ class Servidor(object):
                         self.DATA = str(eval(self.DATA))
 
                     except:
-                        self.DATA = 'Tem q ser uma expressao aritmetica em python, apenas com numeros'
+                        self.DATA = 'Qual parte do \'aritmetica\' vc nao entendeu?'
 
                     self.fala(self.clientConn[0])
                     print "Enviando resposta..."
@@ -164,7 +172,6 @@ class Servidor(object):
 
                 # Escuta da maquina anterior:
                 self.escuta(self.clientConn[0])
-                print ">- ",
                 if not self.DATA: break
 
                 # Fala para a proxima maquina:
@@ -174,23 +181,18 @@ class Servidor(object):
                 else:
                     self.fala(self.sock_servidor)
 
-                print "->"
-
 
                 # Aguarda resposta:
                 self.escuta(self.sock_servidor)
-                print "-< ",
                 if not self.DATA: break
 
                 # Responde para a proxima maquina:
                 elif self.DATA == 'Opa, eh nois!':
-                    self.fala(self.clientConn[0],2)
+                    self.fala(self.clientConn[0],3)
 
                 else:
                     # Envia resposta
                     self.fala(self.clientConn[0])
-
-                print "-<"
 
 
     def conecta_caso_1(self):
@@ -257,14 +259,13 @@ class Servidor(object):
 
         # Conecta com o cliente:
         self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # Como a implementacao cria uma conexao deterministica, eh desnecessario
-        # testar se o cliente eh quem se esperava
-        #self.sock_cliente.bind((MEU_CLIENTE, PORTA_ESCUTA))
-
         self.sock_cliente.bind(('', PORTA_ESCUTA))
         self.sock_cliente.listen(3)
         self.clientConn = self.sock_cliente.accept()
+
+        # Como a implementacao cria uma conexao deterministica, eh desnecessario
+        # testar se o cliente eh o esperado
+        #self.sock_cliente.bind((MEU_CLIENTE, PORTA_ESCUTA))
 
 
         # Conecta com o Servidor:
