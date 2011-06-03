@@ -39,6 +39,10 @@ class Cliente(object):
         text8 = self.ME+" diz: servidor aparenta estar desconectado: "+datetime.now().ctime()+"\n"
         text9 = self.ME+" enviando mensagem de teste para o servidor final.\n"
 
+        ## Logs para conexoes:
+        text10 = self.ME+" tentando conectar-se usando IPv6: "+datetime.now().ctime()+"\n"
+        text11 = self.ME+" diz: nao foi possivel conectar via IPv6, usando IPv4.\n"
+
         if msg == 1:
             # Inicia o log com a marcacao de tempo
             self.logFile.write(text1)
@@ -76,17 +80,29 @@ class Cliente(object):
             self.logFile.write(text9)
 
 
-    def start(self):
+    def conecta(self):
 
-        # Registra o inicio do cliente:
-        self.log(1)
+        # Abrindo um socket IPv6
+        self.sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
 
-        # Abrindo um socket
+        try:
+            # Criando conexao:
+            print "Tentando conectar ao servidor...(IPv6)"
+            self.log(10)
+            self.sock.connect((self.HOST, self.PORT))
+
+        #XXX: corrigir mensagens de log, e especificar os testes.
+        except socket.error:
+            print "Nao foi possivel conectar usando IPv6"
+            self.log(11)
+            #exit(2)
+
+        # Abrindo um socket IPv4
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         try:
             # Criando conexao:
-            print "Tentando conectar ao servidor..."
+            print "Tentando conectar ao servidor...(IPv4)"
             self.log(2)
             self.sock.connect((self.HOST, self.PORT))
 
@@ -94,6 +110,15 @@ class Cliente(object):
             print "Servidor indisponivel =("
             self.log(8)
             exit(2)
+
+
+    def start(self):
+
+        # Registra o inicio do cliente:
+        self.log(1)
+
+        # Criando a conexao:
+        self.conecta()
 
         # Reajustando o timeout, para falar com o servidor:
         self.sock.settimeout(5.)
