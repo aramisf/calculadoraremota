@@ -20,64 +20,32 @@ class Cliente(object):
     def log(self,msg,data=None):
 
         ''' diferentes niveis de log:
-            1 - Inicio da execucao do cliente
-            2 - Tentativa de conexao
-            3 - Envio de dados
-            4 - Recebimento de dados
-            5 - Estouro de timeout na conexao
-            6 - Conexao efetuada
-            7 - Desligando cliente
-            8 - Servidor aparenta estar desconectado
+           00 - Inicio da execucao do cliente
+           01 - Tentativa de conexao
+           02 - Envio de dados para conexao com a outra ponta
+           03 - Envio de dados
+           04 - Recebimento de dados
+           05 - Estouro de timeout na conexao
+           06 - Conexao efetuada
+           07 - Desligando cliente
+           08 - Servidor aparenta estar desconectado
+           09 - Tentativa de conexao usando IPv6
+           10 - Largando IPv6, tentando IPv4
         '''
-        text1 = "\nIniciando "+self.ME+" em modo cliente: "+datetime.now().ctime()+"\n"
-        text2 = self.ME+" tentando conexao com "+self.HOST+": "+datetime.now().ctime()+"\n"
-        text3 = self.ME+" diz: recebi "+str(data)+" de "+self.HOST+" em: "+datetime.now().ctime()+"\n"
-        text4 = self.ME+" diz: enviei "+str(data)+" para "+self.HOST+" em: "+datetime.now().ctime()+"\n"
-        text5 = self.ME+" diz: estouro de timeout ao conectar-se com "+self.HOST+": "+datetime.now().ctime()+"\n"
-        text6 = self.ME+" diz: conectei-me a outra ponta em: "+datetime.now().ctime()+"\n"
-        text7 = self.ME+" diz: desligando em: "+datetime.now().ctime()+" flws \o\n"
-        text8 = self.ME+" diz: servidor aparenta estar desconectado: "+datetime.now().ctime()+"\n"
-        text9 = self.ME+" enviando mensagem de teste para o servidor final.\n"
+        textmsg = [ "\nIniciando "+self.ME+" em modo cliente: "+datetime.now().ctime()+"\n",
+                    self.ME+" tentando conexao com "+self.HOST+": "+datetime.now().ctime()+"\n",
+                    self.ME+" enviando mensagem de teste para o servidor final.\n",
+                    self.ME+" diz: enviei "+str(data)+" para "+self.HOST+" em: "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: recebi "+str(data)+" de "+self.HOST+" em: "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: estouro de timeout ao conectar-se com "+self.HOST+": "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: conectei-me a outra ponta em: "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: desligando em: "+datetime.now().ctime()+" flws \o\n",
+                    self.ME+" diz: servidor aparenta estar desconectado: "+datetime.now().ctime()+"\n",
+                    self.ME+" tentando conectar-se usando IPv6: "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: nao foi possivel conectar via IPv6, usando IPv4.\n"
+                  ]
 
-        ## Logs para conexoes:
-        text10 = self.ME+" tentando conectar-se usando IPv6: "+datetime.now().ctime()+"\n"
-        text11 = self.ME+" diz: nao foi possivel conectar via IPv6, usando IPv4.\n"
-
-        if msg == 1:
-            # Inicia o log com a marcacao de tempo
-            self.logFile.write(text1)
-
-        elif msg == 2:
-            # Recebimento de dados:
-            self.logFile.write(text2)
-
-        elif msg == 3:
-            # Recebimento de dados:
-            self.logFile.write(text3)
-
-        elif msg == 4:
-            # Envio de dados:
-            self.logFile.write(text4)
-
-        elif msg == 5:
-            # Envio de dados:
-            self.logFile.write(text5)
-
-        elif msg == 6:
-            # Envio de dados:
-            self.logFile.write(text6)
-
-        elif msg == 7:
-            # Recebimento de dados:
-            self.logFile.write(text7)
-
-        elif msg == 8:
-            # Envio de dados:
-            self.logFile.write(text8)
-
-        elif msg == 9:
-            # Envio de dados:
-            self.logFile.write(text9)
+        self.logFile.write(textmsg[msg])
 
 
     def conecta(self):
@@ -88,13 +56,13 @@ class Cliente(object):
         try:
             # Criando conexao:
             print "Tentando conectar ao servidor...(IPv6)"
-            self.log(10)
+            self.log(9)
             self.sock.connect((self.HOST, self.PORT))
 
         #XXX: corrigir mensagens de log, e especificar os testes.
         except socket.error:
             print "Nao foi possivel conectar usando IPv6"
-            self.log(11)
+            self.log(10)
             #exit(2)
 
         # Abrindo um socket IPv4
@@ -103,19 +71,19 @@ class Cliente(object):
         try:
             # Criando conexao:
             print "Tentando conectar ao servidor...(IPv4)"
-            self.log(2)
+            self.log(1)
             self.sock.connect((self.HOST, self.PORT))
 
         except socket.error:
             print "Servidor indisponivel =("
-            self.log(8)
-            exit(2)
+            self.log(7)
+            exit(1)
 
 
     def start(self):
 
         # Registra o inicio do cliente:
-        self.log(1)
+        self.log(0)
 
         # Criando a conexao:
         self.conecta()
@@ -136,16 +104,16 @@ class Cliente(object):
                 # Enviando dados e armazenando no log:
                 self.sock.send(data)
                 print "Enviei msg teste para a outra ponta"
-                self.log(9)
+                self.log(2)
 
                 # Validando a resposta:
             except socket.timeout:
                 print "%do estouro de timeout no envio da mensagem teste" % i+1
-                self.log(6)
+                self.log(5)
 
             except socket.error:
                 print "Meu servidor caiu 3"
-                self.log(8)
+                self.log(7)
                 exit(1)
 
             # Se rolou de enviar, agora recebe os dados e analiza
@@ -154,7 +122,7 @@ class Cliente(object):
 
             except socket.error:
                 print "Conexao perdida"
-                self.log(8)
+                self.log(7)
                 exit(1)
 
             if data == 'Opa, eh nois!':
@@ -164,7 +132,7 @@ class Cliente(object):
 
             elif data == '':
                 print "Meu servidor caiu 2"
-                self.log(8)
+                self.log(7)
                 exit(1)
 
 
@@ -178,18 +146,18 @@ class Cliente(object):
             # Enviando dados e armazenando no log:
             try:
                 self.sock.send(data)
-                self.log(4,data)
+                self.log(3,data)
 
             except socket.error:
                 print "Meu servidor caiu 4"
-                self.log(8)
+                self.log(7)
                 exit(1)
 
             # Recebendo dados do servidor e atualizando o log
 #            try:
             data = self.sock.recv(1024)
             print "R: %s" % str(data)
-            self.log(3,data)
+            self.log(4,data)
 
 #            except socket.error:
 #                print "Meu servidor caiu 5"
