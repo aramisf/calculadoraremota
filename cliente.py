@@ -31,6 +31,7 @@ class Cliente(object):
            08 - Servidor aparenta estar desconectado
            09 - Tentativa de conexao usando IPv6
            10 - Largando IPv6, tentando IPv4
+           11 - IPv6 conectado com sucesso
         '''
         textmsg = [ "\nIniciando "+self.ME+" em modo cliente: "+datetime.now().ctime()+"\n",
                     self.ME+" tentando conexao com "+self.HOST+": "+datetime.now().ctime()+"\n",
@@ -39,10 +40,11 @@ class Cliente(object):
                     self.ME+" diz: recebi "+str(data)+" de "+self.HOST+" em: "+datetime.now().ctime()+"\n",
                     self.ME+" diz: estouro de timeout ao conectar-se com "+self.HOST+": "+datetime.now().ctime()+"\n",
                     self.ME+" diz: conectei-me a outra ponta em: "+datetime.now().ctime()+"\n",
-                    self.ME+" diz: desligando em: "+datetime.now().ctime()+" flws \o\n",
+                    self.ME+" diz: desligando em "+datetime.now().ctime()+" flws \o\n",
                     self.ME+" diz: servidor aparenta estar desconectado: "+datetime.now().ctime()+"\n",
                     self.ME+" tentando conectar-se usando IPv6: "+datetime.now().ctime()+"\n",
-                    self.ME+" diz: nao foi possivel conectar via IPv6, usando IPv4.\n"
+                    self.ME+" diz: nao foi possivel conectar via IPv6, usando IPv4.\n",
+                    self.ME+" diz: conectado via IPv6.\n"
                   ]
 
         self.logFile.write(textmsg[msg])
@@ -51,31 +53,39 @@ class Cliente(object):
     def conecta(self):
 
         # Abrindo um socket IPv6
-        self.sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-
         try:
-            # Criando conexao:
-            print "Tentando conectar ao servidor...(IPv6)"
-            self.log(9)
-            self.sock.connect((self.HOST, self.PORT))
+            self.sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
 
         except socket.error:
-            print "Nao foi possivel conectar usando IPv6"
+            print "Impossivel abrir socket IPv6"
             self.log(10)
 
-            # Abrindo um socket IPv4
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        else:
 
             try:
                 # Criando conexao:
-                print "Tentando conectar ao servidor...(IPv4)"
-                self.log(1)
+                print "Tentando conectar ao servidor...(IPv6)"
+                self.log(9)
                 self.sock.connect((self.HOST, self.PORT))
+                self.log(11)
 
             except socket.error:
-                print "Servidor indisponivel =("
-                self.log(7)
-                exit(1)
+                print "Nao foi possivel conectar usando IPv6"
+                self.log(10)
+
+                # Abrindo um socket IPv4
+                self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+                try:
+                    # Criando conexao:
+                    print "Tentando conectar ao servidor...(IPv4)"
+                    self.log(1)
+                    self.sock.connect((self.HOST, self.PORT))
+
+                except socket.error:
+                    print "Servidor indisponivel =("
+                    self.log(7)
+                    exit(1)
 
 
     def start(self):
@@ -142,12 +152,12 @@ class Cliente(object):
             try:
                 data = raw_input("Digite a expressao aritmetica: ")
 
-            except EOF.error:
+            except EOFError:
                 print "Saindo..."
                 self.log(7)
                 exit(0)
 
-            if data == "exit"
+            if data == "exit":
                 print "Saindo..."
                 self.log(7)
                 exit(0)
@@ -164,15 +174,7 @@ class Cliente(object):
                 exit(1)
 
             # Recebendo dados do servidor e atualizando o log
-#            try:
             data = self.sock.recv(1024)
             print "R: %s" % str(data)
             self.log(4,data)
-
-#            except socket.error:
-#                print "Meu servidor caiu 5"
-#                self.log(8)
-#                exit(1)
-# 
-
 
