@@ -139,7 +139,19 @@ class Cliente(object):
         while True:
 
             # Recebendo dados do usuario:
-            data = raw_input("Digite a expressao aritmetica: ")
+            try:
+                data = raw_input("Digite a expressao aritmetica: ")
+
+            except EOF.error:
+                print "Saindo..."
+                self.log(7)
+                exit(0)
+
+            if data == "exit"
+                print "Saindo..."
+                self.log(7)
+                exit(0)
+
 
             # Enviando dados e armazenando no log:
             try:
