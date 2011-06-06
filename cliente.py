@@ -59,25 +59,23 @@ class Cliente(object):
             self.log(9)
             self.sock.connect((self.HOST, self.PORT))
 
-        #XXX: corrigir mensagens de log, e especificar os testes.
         except socket.error:
             print "Nao foi possivel conectar usando IPv6"
             self.log(10)
-            #exit(2)
 
-        # Abrindo um socket IPv4
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # Abrindo um socket IPv4
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        try:
-            # Criando conexao:
-            print "Tentando conectar ao servidor...(IPv4)"
-            self.log(1)
-            self.sock.connect((self.HOST, self.PORT))
+            try:
+                # Criando conexao:
+                print "Tentando conectar ao servidor...(IPv4)"
+                self.log(1)
+                self.sock.connect((self.HOST, self.PORT))
 
-        except socket.error:
-            print "Servidor indisponivel =("
-            self.log(7)
-            exit(1)
+            except socket.error:
+                print "Servidor indisponivel =("
+                self.log(7)
+                exit(1)
 
 
     def start(self):
@@ -106,7 +104,6 @@ class Cliente(object):
                 print "Enviei msg teste para a outra ponta"
                 self.log(2)
 
-                # Validando a resposta:
             except socket.timeout:
                 print "%do estouro de timeout no envio da mensagem teste" % i+1
                 self.log(5)
@@ -125,6 +122,7 @@ class Cliente(object):
                 self.log(7)
                 exit(1)
 
+            # Validando a resposta:
             if data == 'Opa, eh nois!':
                 print "Conexao efetuada com sucesso"
                 self.log(6)
