@@ -11,7 +11,6 @@ class Servidor(object):
     def __init__(self,ME,MINHA_PORTA,l_hosts,l_ports,logFP):
 
         self.ME = ME
-        #self.HOST = ME
         self.DATA = ''
         self.PORT = MINHA_PORTA
         self.INDICE = l_hosts.index(self.ME)
@@ -24,47 +23,34 @@ class Servidor(object):
     def log(self,msg,maq=None):
 
         ''' diferentes niveis de log:
-            1 - inicio
-            2 - recebimento de mensagem
-            3 - envio de mensagem
-            4 - texto de confirmacao de conexao com o cliente
+            0 - inicio
+            1 - recebimento de mensagem
+            2 - envio de mensagem
+            3 - texto de confirmacao de conexao com o cliente
+            4 - servidor desta maquina aparentemente desligado
+            5 - desligamento do servidor
+            6 - repassando mensagem de teste na ida
+            7 - repassando mensagem de teste na volta
+            8 - tentando conexao ipv6
+            9 - conexao ipv6 indisponivel, mudando para ipv4
+           10 - CONEXAO IPV6 HUHUHUHUH
+           10 - CONEXAO IPV4
         '''
-        text1 = "\nIniciando "+self.ME+" em modo servidor: "+datetime.now().ctime()+"\n"
-        text2 = self.ME+" diz: Recebi "+str(self.DATA)+": "+datetime.now().ctime()+"\n"
-        text3 = self.ME+" diz: Enviei "+str(self.DATA)+": "+datetime.now().ctime()+"\n"
-        text4 = self.ME+" confirmando teste de conexao com o cliente: "+datetime.now().ctime()+"\n"
-        text5 = self.ME+" meu servidor (%s) parece estar desconectado. "%str(maq)+datetime.now().ctime()+"\n"
-        text6 = self.ME+" -> Desligando...\n"
-        text7 = self.ME+" repassando mensagem de teste (ida)\n"
-        text8 = self.ME+" repassando mensagem de teste (volta)\n"
+        textmsg = [ "\nIniciando "+self.ME+" em modo servidor: "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: Recebi "+str(self.DATA)+": "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: Enviei "+str(self.DATA)+": "+datetime.now().ctime()+"\n",
+                    self.ME+" confirmando teste de conexao com o cliente: "+datetime.now().ctime()+"\n",
+                    self.ME+" meu servidor (%s) parece estar desconectado. "%str(maq)+datetime.now().ctime()+"\n",
+                    self.ME+" -> Desligando...\n",
+                    self.ME+" repassando mensagem de teste (ida)\n",
+                    self.ME+" repassando mensagem de teste (volta)\n",
+                    self.ME+" diz: tentando conectar usando ipv6. "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: ipv6 falhou, usando ipv4. "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: conectei-me usando IPv6 "+datetime.now().ctime()+"\n",
+                    self.ME+" diz: conectei-me usando IPv4 "+datetime.now().ctime()+"\n"
+                  ]
 
-        if msg == 1:
-            # Inicia o log com a marcacao de tempo:
-            self.logFile.write(text1)
-
-        elif msg == 2:
-            # Recebimento de dados:
-            self.logFile.write(text2)
-
-        elif msg == 3:
-            # Envio de dados:
-            self.logFile.write(text3)
-
-        elif msg == 4:
-            # Envio de dados:
-            self.logFile.write(text4)
-
-        elif msg == 5:
-            # Envio de dados:
-            self.logFile.write(text5)
-
-        elif msg == 6:
-            # Envio de dados:
-            self.logFile.write(text6)
-
-        elif msg == 7:
-            # Envio de dados:
-            self.logFile.write(text7)
+        self.logFile.write(textmsg[msg])
 
 
     def fala(self,para_onde,cliente=0): # para_onde eh um socket
@@ -72,34 +58,36 @@ class Servidor(object):
         # Enviando dados e armazenando no log:
         try:
             para_onde.send(self.DATA)
-            #self.DATA = para_onde.recv(1024)
+
+            # Testa aqui se self.DATA nao eh vazio, isso faz diferenca no log.
             if self.DATA:
 
                 # Conforme a mensagem, registra um log diferente:
                 # Para registrar sucesso na conexao:
                 if cliente == 1:
-                    self.log(4)
+                    self.log(3)
 
                 # Para registrar mensagem de teste na ida:
                 elif cliente == 2:
-                    self.log(7)
+                    self.log(6)
 
                 # Para registrar mensagem de teste na volta:
                 elif cliente == 3:
-                    self.log(8)
+                    self.log(7)
 
                 else:
-                    self.log(3)
+                    self.log(2)
 
 
         except socket.error:
-            print MEU_SERVIDOR+" parece estar desconectado\n"
+
+            print self.MEU_SERVIDOR+" parece estar desconectado\n"
 
             # Registrando isso no log:
-            self.log(5,MEU_SERVIDOR)
+            self.log(4,self.MEU_SERVIDOR)
 
             # Registrando saida:
-            self.log(6)
+            self.log(5)
             exit(1)
 
 
@@ -110,28 +98,29 @@ class Servidor(object):
         try:
             self.DATA = de_onde.recv(1024)
             if self.DATA != 'Iae vei? Firmeza?' and self.DATA != 'Opa, eh nois!':
-                self.log(2)
+                self.log(1)
 
         except socket.error:
-            print MEU_SERVIDOR+" parece estar desconectado\n"
+            print self.MEU_SERVIDOR+" parece estar desconectado\n"
 
             # Registrando isso no log:
-            self.log(5,MEU_SERVIDOR)
+            self.log(4,self.MEU_SERVIDOR)
 
             # Registrando saida:
-            self.log(6)
+            self.log(5)
             exit(1)
 
 
 
     def start(self):
 
-        self.log(1)
+        self.log(0)
 
         if self.INDICE == 0:
             self.conecta_caso_1()
 
         elif self.INDICE == (self.MAX_HOSTS - 1):
+            self.MEU_SERVIDOR = self.l_hosts[self.INDICE - 1]
             self.conecta_caso_3()
 
         else:
@@ -164,8 +153,8 @@ class Servidor(object):
                     except:
                         self.DATA = 'Qual parte do \'aritmetica\' vc nao entendeu?'
 
-                    self.fala(self.clientConn[0])
                     print "Enviando resposta..."
+                    self.fala(self.clientConn[0])
 
             # Se nao for o caso 3, pode ser o caso 1 ou 2
             else:
@@ -194,6 +183,76 @@ class Servidor(object):
                     # Envia resposta
                     self.fala(self.clientConn[0])
 
+    # Cria a conexao para o cliente:
+    def conecta_cliente(self,PORT):
+        ''' Cria a conexao, primeiro tenta fazer ipv6, se falhar faz ipv4
+        '''
+
+        # Abrindo socket IPv6:
+        try:
+            self.sock_cliente = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+
+        except socket.error:
+            print "Nao foi possivel abrir o socket"
+            self.log(9)
+
+        try:
+            # Criando a conexao para escutar o cliente. Novamente, como na
+            # implementacao o modelo eh deterministico, nao eh necessario
+            # checar quem eh o cliente, apenas uma maquina tentara acessar esta
+            # maquina por esta porta
+            self.sock_cliente.bind(('', PORT))
+            self.log(10)
+
+        except socket.error:
+            print "Conexao IPv6 falhou"
+            self.log(9)
+
+            # Usando IPv4, assumindo que vai dar sempre certo:
+            self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock_cliente.bind(('', PORT))
+
+        self.sock_cliente.listen(3)
+        self.clientConn = self.sock_cliente.accept()
+        print "Meu cliente: ",self.clientConn[0].getsockname()
+
+
+    # Cria uma conexao com o servidor;
+    def conecta_meu_servidor(self,HOST,PORT):
+
+        # Tenta fazer a conexao com IPv6:
+        try:
+            self.sock_servidor = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+
+        except socket.error:
+            self.log(9)
+
+        # Tenta se conectar:
+        try:
+            self.log(8)
+            self.sock_servidor.connect((HOST, PORT))
+            self.log(10)
+
+        except socket.error:
+
+            try:
+                # Tenta o IPv4:
+                self.sock_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.sock_servidor.connect((HOST, PORT))
+                self.log(11)
+
+            except socket.error:
+                print HOST+" parece estar desconectado\n"
+
+                # Registrando isso no log:
+                self.log(4,HOST)
+
+                # Registrando saida:
+                self.log(5)
+                exit(1)
+
+        print "Meu servidor: ",self.sock_servidor.getpeername()
+
 
     def conecta_caso_1(self):
         ''' Caso 1 eh quando o servidor eh o 1o da lista, ou seja, ele deve
@@ -206,34 +265,13 @@ class Servidor(object):
         PORT = self.l_ports[0]
 
         # Conecta com o cliente:
-        self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_cliente.bind((HOST, PORT))
-        self.sock_cliente.listen(3)
-        self.clientConn = self.sock_cliente.accept()
+        self.conecta_cliente(PORT)
 
         # Conecta com o Servidor:
-        MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
-        PORTA_DELE = self.l_ports[self.l_hosts.index(self.ME)+1]
+        self.MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
+        self.PORTA_FALA = self.l_ports[self.l_hosts.index(self.ME)+1]
 
-        print "Meu host %s" % MEU_SERVIDOR
-        print "Porta de fala: %d" % PORTA_DELE
-
-        # Abre um socket para se conectar ao servidor:
-        self.sock_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # Tenta se conectar:
-        try:
-            self.sock_servidor.connect((MEU_SERVIDOR, PORTA_DELE))
-
-        except socket.error:
-            print MEU_SERVIDOR+" parece estar desconectado\n"
-
-            # Registrando isso no log:
-            self.log(5,MEU_SERVIDOR)
-
-            # Registrando saida:
-            self.log(6)
-            exit(1)
+        self.conecta_meu_servidor(self.MEU_SERVIDOR,self.PORTA_FALA)
 
 
 
@@ -245,23 +283,15 @@ class Servidor(object):
         '''
 
         # Informacoes para conectar com o cliente:
-        MEU_CLIENTE = self.l_hosts[self.l_hosts.index(self.ME)-1]
-        PORTA_ESCUTA = self.l_ports[self.l_hosts.index(self.ME)]
+        self.MEU_CLIENTE = self.l_hosts[self.l_hosts.index(self.ME)-1]
+        self.PORTA_ESCUTA = self.l_ports[self.l_hosts.index(self.ME)]
 
         # Informacoes para conectar com o servidor
-        MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
-        PORTA_FALA = self.l_ports[self.l_hosts.index(self.ME)+1]
-
-        print "Meu cliente %s" % MEU_CLIENTE
-        print "Porta de escuta: %d" % PORTA_ESCUTA
-        print "Meu host %s" % MEU_SERVIDOR
-        print "Porta de fala: %d" % PORTA_FALA
+        self.MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
+        self.PORTA_FALA = self.l_ports[self.l_hosts.index(self.ME)+1]
 
         # Conecta com o cliente:
-        self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_cliente.bind(('', PORTA_ESCUTA))
-        self.sock_cliente.listen(3)
-        self.clientConn = self.sock_cliente.accept()
+        self.conecta_cliente(self.PORTA_ESCUTA)
 
         # Como a implementacao cria uma conexao deterministica, eh desnecessario
         # testar se o cliente eh o esperado
@@ -269,24 +299,7 @@ class Servidor(object):
 
 
         # Conecta com o Servidor:
-        MEU_SERVIDOR = self.l_hosts[self.l_hosts.index(self.ME)+1]
-        PORTA_DELE = self.l_ports[self.l_hosts.index(self.ME)+1]
-
-        # Abre o socket e conecta:
-        self.sock_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        try:
-            self.sock_servidor.connect((MEU_SERVIDOR, PORTA_FALA))
-
-        except socket.error:
-            print MEU_SERVIDOR+" parece estar desconectado\n"
-
-            # Registrando isso no log:
-            self.log(5,MEU_SERVIDOR)
-
-            # Registrando saida:
-            self.log(6)
-            exit(1)
+        self.conecta_meu_servidor(self.MEU_SERVIDOR, self.PORTA_FALA)
 
 
     def conecta_caso_3(self):
@@ -294,16 +307,8 @@ class Servidor(object):
         porta dele, efetuar a operacao matematica e devolver o resultado.
         '''
 
-        HOST = self.l_hosts[-2]
-        PORT = self.l_ports[-1]
-
-        print "Meu cliente %s" % HOST
-        print "Porta de escuta: %d" % PORT
+        self.MEU_CLIENTE = self.l_hosts[-2]
+        self.PORTA_ESCUTA = self.l_ports[-1]
 
         # Conecta com o cliente:
-        self.sock_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.sock_cliente.bind((HOST, PORT))
-        self.sock_cliente.bind(('', PORT))
-        self.sock_cliente.listen(3)
-        self.clientConn = self.sock_cliente.accept()
-
+        self.conecta_cliente(self.PORTA_ESCUTA)
