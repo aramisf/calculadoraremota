@@ -1,71 +1,130 @@
+# Este comentario foi inserido a mao. Mais alguns comentarios como esse estarao
+# presentes neste log, para fins de esclarecimento. Nenhum dos comentarios foi
+# gerado pelos programas.
 
-Iniciando bowmore(em modo cliente): Tue May 31 04:26:04 2011
-bowmore (cliente) diz: enviei 8**5 em: Tue May 31 04:26:09 2011
-bowmore (cliente) diz: recebi 32768 em: Tue May 31 04:26:09 2011
-bowmore (cliente) diz: enviei 2**31 em: Tue May 31 04:26:16 2011
-bowmore (cliente) diz: recebi 2147483648 em: Tue May 31 04:26:16 2011
-bowmore (cliente) diz: enviei 4./3 em: Tue May 31 04:26:27 2011
-bowmore (cliente) diz: recebi 1.33333333333 em: Tue May 31 04:26:27 2011
-bowmore (cliente) diz: enviei 0*59 em: Tue May 31 04:26:35 2011
-bowmore (cliente) diz: recebi 0 em: Tue May 31 04:26:35 2011
-bowmore (cliente) diz: enviei 2**14 em: Tue May 31 04:26:45 2011
-bowmore (cliente) diz: recebi 16384 em: Tue May 31 04:26:45 2011
+# Iniciando os programas:
+Iniciando caporal em modo servidor: Wed Jun  8 01:20:58 2011
+Iniciando macalan em modo servidor: Wed Jun  8 01:21:00 2011
+Iniciando talisker em modo servidor: Wed Jun  8 01:21:06 2011
+Iniciando dalmore em modo servidor: Wed Jun  8 01:21:09 2011
+Iniciando bowmore em modo cliente: Wed Jun  8 01:21:24 2011
 
-Iniciando macalan em modo servidor: Tue May 31 04:25:58 2011
-macalan diz: Recebi 8**5: Tue May 31 04:26:09 2011
-macalan diz: Enviei 8**5: Tue May 31 04:26:09 2011
-macalan diz: Recebi 32768: Tue May 31 04:26:09 2011
-macalan diz: Enviei 32768: Tue May 31 04:26:09 2011
-macalan diz: Recebi 2**31: Tue May 31 04:26:16 2011
-macalan diz: Enviei 2**31: Tue May 31 04:26:16 2011
-macalan diz: Recebi 2147483648: Tue May 31 04:26:16 2011
-macalan diz: Enviei 2147483648: Tue May 31 04:26:16 2011
-macalan diz: Recebi 4./3: Tue May 31 04:26:27 2011
-macalan diz: Enviei 4./3: Tue May 31 04:26:27 2011
-macalan diz: Recebi 1.33333333333: Tue May 31 04:26:27 2011
-macalan diz: Enviei 1.33333333333: Tue May 31 04:26:27 2011
-macalan diz: Recebi 0*59: Tue May 31 04:26:35 2011
-macalan diz: Enviei 0*59: Tue May 31 04:26:35 2011
-macalan diz: Recebi 0: Tue May 31 04:26:35 2011
-macalan diz: Enviei 0: Tue May 31 04:26:35 2011
-macalan diz: Recebi 2**14: Tue May 31 04:26:45 2011
-macalan diz: Enviei 2**14: Tue May 31 04:26:45 2011
-macalan diz: Recebi 16384: Tue May 31 04:26:45 2011
-macalan diz: Enviei 16384: Tue May 31 04:26:45 2011
-macalan diz: Recebi : Tue May 31 04:26:47 2011
+# Note que no momento em que os servidores tentam abrir uma conexao para escuta,
+# e assim que alguma conexao eh feita na porta de escuta, o servidor tenta se
+# conectar ao seu servidor - a proxima maquina da lista.
 
-Iniciando dalmore em modo servidor: Tue May 31 04:26:00 2011
-dalmore diz: Recebi 8**5: Tue May 31 04:26:09 2011
-dalmore diz: Enviei 8**5: Tue May 31 04:26:09 2011
-dalmore diz: Recebi 32768: Tue May 31 04:26:09 2011
-dalmore diz: Enviei 32768: Tue May 31 04:26:09 2011
-dalmore diz: Recebi 2**31: Tue May 31 04:26:16 2011
-dalmore diz: Enviei 2**31: Tue May 31 04:26:16 2011
-dalmore diz: Recebi 2147483648: Tue May 31 04:26:16 2011
-dalmore diz: Enviei 2147483648: Tue May 31 04:26:16 2011
-dalmore diz: Recebi 4./3: Tue May 31 04:26:27 2011
-dalmore diz: Enviei 4./3: Tue May 31 04:26:27 2011
-dalmore diz: Recebi 1.33333333333: Tue May 31 04:26:27 2011
-dalmore diz: Enviei 1.33333333333: Tue May 31 04:26:27 2011
-dalmore diz: Recebi 0*59: Tue May 31 04:26:35 2011
-dalmore diz: Enviei 0*59: Tue May 31 04:26:35 2011
-dalmore diz: Recebi 0: Tue May 31 04:26:35 2011
-dalmore diz: Enviei 0: Tue May 31 04:26:35 2011
-dalmore diz: Recebi 2**14: Tue May 31 04:26:45 2011
-dalmore diz: Enviei 2**14: Tue May 31 04:26:45 2011
-dalmore diz: Recebi 16384: Tue May 31 04:26:45 2011
-dalmore diz: Enviei 16384: Tue May 31 04:26:45 2011
-dalmore diz: Recebi : Tue May 31 04:26:47 2011
+# Tentativas de conexao:
+caporal diz: tentando conectar usando ipv6 -. Wed Jun  8 01:20:58 2011
+caporal diz: conexao IPv6 efetuada - Wed Jun  8 01:20:58 2011
+macalan diz: tentando conectar usando ipv6 -. Wed Jun  8 01:21:00 2011
+macalan diz: conexao IPv6 efetuada - Wed Jun  8 01:21:00 2011
+talisker diz: tentando conectar usando ipv6 -. Wed Jun  8 01:21:06 2011
+talisker diz: conexao IPv6 efetuada - Wed Jun  8 01:21:06 2011
+dalmore diz: tentando conectar usando ipv6 -. Wed Jun  8 01:21:09 2011
+dalmore diz: conexao IPv6 efetuada - Wed Jun  8 01:21:09 2011
 
-Iniciando talisker em modo servidor: Tue May 31 04:26:02 2011
-talisker diz: Recebi 8**5: Tue May 31 04:26:09 2011
-talisker diz: Enviei 32768: Tue May 31 04:26:09 2011
-talisker diz: Recebi 2**31: Tue May 31 04:26:16 2011
-talisker diz: Enviei 2147483648: Tue May 31 04:26:16 2011
-talisker diz: Recebi 4./3: Tue May 31 04:26:27 2011
-talisker diz: Enviei 1.33333333333: Tue May 31 04:26:27 2011
-talisker diz: Recebi 0*59: Tue May 31 04:26:35 2011
-talisker diz: Enviei 0: Tue May 31 04:26:35 2011
-talisker diz: Recebi 2**14: Tue May 31 04:26:45 2011
-talisker diz: Enviei 16384: Tue May 31 04:26:45 2011
-talisker diz: Recebi : Tue May 31 04:26:47 2011
+# Note que a partir do momento que bowmore (cliente) tenta se conectar, as
+# outras maquinas se conectam umas as outras:
+
+bowmore tentando conectar-se usando IPv6: Wed Jun  8 01:21:24 2011
+bowmore diz: conectado via IPv6 - Wed Jun  8 01:21:24 2011
+macalan diz: tentando conectar usando ipv6 -. Wed Jun  8 01:21:24 2011
+macalan diz: conexao IPv6 efetuada - Wed Jun  8 01:21:24 2011
+dalmore diz: tentando conectar usando ipv6 -. Wed Jun  8 01:21:24 2011
+dalmore diz: conexao IPv6 efetuada - Wed Jun  8 01:21:24 2011
+talisker diz: tentando conectar usando ipv6 -. Wed Jun  8 01:21:24 2011
+talisker diz: conexao IPv6 efetuada - Wed Jun  8 01:21:24 2011
+
+# Envio e Recebimento de mensagens:
+bowmore diz: enviei 3+5 para macalan em: Wed Jun  8 01:21:40 2011
+macalan diz: Recebi 3+5: Wed Jun  8 01:21:40 2011
+macalan diz: Enviei 3+5: Wed Jun  8 01:21:40 2011
+dalmore diz: Recebi 3+5: Wed Jun  8 01:21:40 2011
+dalmore diz: Enviei 3+5: Wed Jun  8 01:21:40 2011
+talisker diz: Recebi 3+5: Wed Jun  8 01:21:40 2011
+talisker diz: Enviei 3+5: Wed Jun  8 01:21:40 2011
+caporal diz: Recebi 3+5: Wed Jun  8 01:21:40 2011
+caporal diz: Enviei 8: Wed Jun  8 01:21:40 2011
+talisker diz: Recebi 8: Wed Jun  8 01:21:40 2011
+talisker diz: Enviei 8: Wed Jun  8 01:21:40 2011
+dalmore diz: Recebi 8: Wed Jun  8 01:21:40 2011
+dalmore diz: Enviei 8: Wed Jun  8 01:21:40 2011
+macalan diz: Recebi 8: Wed Jun  8 01:21:40 2011
+macalan diz: Enviei 8: Wed Jun  8 01:21:40 2011
+bowmore diz: recebi 8 de macalan em: Wed Jun  8 01:21:40 2011
+
+bowmore diz: enviei 10*95 para macalan em: Wed Jun  8 01:21:45 2011
+macalan diz: Recebi 10*95: Wed Jun  8 01:21:45 2011
+macalan diz: Enviei 10*95: Wed Jun  8 01:21:45 2011
+dalmore diz: Recebi 10*95: Wed Jun  8 01:21:45 2011
+dalmore diz: Enviei 10*95: Wed Jun  8 01:21:45 2011
+talisker diz: Recebi 10*95: Wed Jun  8 01:21:45 2011
+talisker diz: Enviei 10*95: Wed Jun  8 01:21:45 2011
+caporal diz: Recebi 10*95: Wed Jun  8 01:21:45 2011
+caporal diz: Enviei 950: Wed Jun  8 01:21:45 2011
+talisker diz: Recebi 950: Wed Jun  8 01:21:45 2011
+talisker diz: Enviei 950: Wed Jun  8 01:21:45 2011
+dalmore diz: Recebi 950: Wed Jun  8 01:21:45 2011
+dalmore diz: Enviei 950: Wed Jun  8 01:21:45 2011
+macalan diz: Recebi 950: Wed Jun  8 01:21:45 2011
+macalan diz: Enviei 950: Wed Jun  8 01:21:45 2011
+bowmore diz: recebi 950 de macalan em: Wed Jun  8 01:21:45 2011
+
+bowmore diz: enviei 1000/3. para macalan em: Wed Jun  8 01:21:50 2011
+macalan diz: Recebi 1000/3.: Wed Jun  8 01:21:50 2011
+macalan diz: Enviei 1000/3.: Wed Jun  8 01:21:50 2011
+dalmore diz: Recebi 1000/3.: Wed Jun  8 01:21:50 2011
+dalmore diz: Enviei 1000/3.: Wed Jun  8 01:21:50 2011
+talisker diz: Recebi 1000/3.: Wed Jun  8 01:21:50 2011
+talisker diz: Enviei 1000/3.: Wed Jun  8 01:21:50 2011
+caporal diz: Recebi 1000/3.: Wed Jun  8 01:21:51 2011
+caporal diz: Enviei 333.333333333: Wed Jun  8 01:21:51 2011
+talisker diz: Recebi 333.333333333: Wed Jun  8 01:21:50 2011
+talisker diz: Enviei 333.333333333: Wed Jun  8 01:21:50 2011
+dalmore diz: Recebi 333.333333333: Wed Jun  8 01:21:50 2011
+dalmore diz: Enviei 333.333333333: Wed Jun  8 01:21:50 2011
+macalan diz: Recebi 333.333333333: Wed Jun  8 01:21:50 2011
+macalan diz: Enviei 333.333333333: Wed Jun  8 01:21:50 2011
+bowmore diz: recebi 333.333333333 de macalan em: Wed Jun  8 01:21:50 2011
+
+bowmore diz: enviei 2**70 para macalan em: Wed Jun  8 01:21:58 2011
+macalan diz: Recebi 2**70: Wed Jun  8 01:21:58 2011
+macalan diz: Enviei 2**70: Wed Jun  8 01:21:58 2011
+dalmore diz: Recebi 2**70: Wed Jun  8 01:21:58 2011
+dalmore diz: Enviei 2**70: Wed Jun  8 01:21:58 2011
+talisker diz: Recebi 2**70: Wed Jun  8 01:21:58 2011
+talisker diz: Enviei 2**70: Wed Jun  8 01:21:58 2011
+caporal diz: Recebi 2**70: Wed Jun  8 01:21:58 2011
+caporal diz: Enviei 1180591620717411303424: Wed Jun  8 01:21:58 2011
+talisker diz: Recebi 1180591620717411303424: Wed Jun  8 01:21:58 2011
+talisker diz: Enviei 1180591620717411303424: Wed Jun  8 01:21:58 2011
+dalmore diz: Recebi 1180591620717411303424: Wed Jun  8 01:21:58 2011
+dalmore diz: Enviei 1180591620717411303424: Wed Jun  8 01:21:58 2011
+macalan diz: Recebi 1180591620717411303424: Wed Jun  8 01:21:58 2011
+macalan diz: Enviei 1180591620717411303424: Wed Jun  8 01:21:58 2011
+bowmore diz: recebi 1180591620717411303424 de macalan em: Wed Jun  8 01:21:58 2011
+
+bowmore diz: enviei a+b para macalan em: Wed Jun  8 01:22:25 2011
+macalan diz: Recebi a+b: Wed Jun  8 01:22:25 2011
+macalan diz: Enviei a+b: Wed Jun  8 01:22:25 2011
+dalmore diz: Recebi a+b: Wed Jun  8 01:22:25 2011
+dalmore diz: Enviei a+b: Wed Jun  8 01:22:25 2011
+talisker diz: Recebi a+b: Wed Jun  8 01:22:25 2011
+talisker diz: Enviei a+b: Wed Jun  8 01:22:25 2011
+caporal diz: Recebi a+b: Wed Jun  8 01:22:25 2011
+caporal diz: Enviei Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+talisker diz: Recebi Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+talisker diz: Enviei Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+dalmore diz: Recebi Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+dalmore diz: Enviei Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+macalan diz: Recebi Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+macalan diz: Enviei Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:25 2011
+bowmore diz: recebi Qual parte do 'aritmetica' vc nao entendeu? de macalan em: Wed Jun  8 01:22:25 2011
+
+# Neste instante, foi pressionado ctrl+d na bowmore:
+bowmore -> desligando em Wed Jun  8 01:22:27 2011
+
+# Caporal recebe o ctrl+d, devolve a pergunta, perde conexao e desliga.
+caporal diz: Enviei Qual parte do 'aritmetica' vc nao entendeu?: Wed Jun  8 01:22:27 2011
+caporal diz: sem conexao com talisker - Wed Jun  8 01:22:27 2011
+caporal -> desligando... - Wed Jun  8 01:22:27 2011
