@@ -12,12 +12,12 @@ class Cliente(object):
     def __init__(self,ME,l_hosts,l_ports,logFP):
 
         self.HOST = ''
-        self.PORT = int(l_ports[l_hosts.index(self.HOST)])
         self.logFile = logFP
         self.ME = ME
 
         # Atribuindo valor a self.HOST
-        self.escolhe_servidor()
+        self.escolhe_servidor(l_hosts)
+        self.PORT = int(l_ports[l_hosts.index(self.HOST)])
 
     def log(self,msg,data='nada'):
 
@@ -45,30 +45,30 @@ class Cliente(object):
 
         self.logFile.write(textmsg[msg])
 
-    def escolhe_host(self):
+    def escolhe_servidor(self,l_hosts):
 
         while True:
             # Lista as maquinas disponiveis para o cliente se conectar.
             for i,j in enumerate(l_hosts):
                 print i,j
-    
+
             maq = raw_input("Escolha uma das maquinas acima: ")
-    
+
             try:
                 indice = int(maq)
-                if l_hosts(indice)):
-                    self.HOST = l_hosts[int(maq)]
+                if l_hosts[indice]:
+                    self.HOST = l_hosts[indice]
                     break
-    
+
             except IndexError:
                 print
                 continue
-    
+
             except ValueError:
                 if maq in l_hosts:
                     self.HOST = maq
                     break
-    
+
                 else:
                     print
                     continue
@@ -94,7 +94,7 @@ class Cliente(object):
                 self.log(6)
 
             except socket.error:
-               
+
                 # Falhou o IPv4 tb... provavelmente perdeu-se a conexao
                 self.log(7)
                 exit(1)
