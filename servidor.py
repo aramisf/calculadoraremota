@@ -47,7 +47,7 @@ class Servidor(object):
         self.logFile.write(textmsg[msg])
 
 
-    def fala(self,para_onde,cliente=0): # para_onde eh um socket
+    def fala(self,para_onde): # para_onde eh um socket
 
         # Enviando dados e armazenando no log:
         try:
@@ -100,7 +100,6 @@ class Servidor(object):
         # Caso 3 possui uma unica conexao (1 cliente, 0 servidor):
         if self.INDICE == (self.MAX_HOSTS - 1):
 
-            self.MEU_SERVIDOR = self.l_hosts[self.INDICE - 1]
             self.conecta_maquina_N()
 
             while True:
@@ -237,9 +236,13 @@ class Servidor(object):
         porta dele, efetuar a operacao matematica e devolver o resultado.
         '''
 
-        self.MEU_CLIENTE = self.l_hosts[-2]
         self.PORTA_ESCUTA = self.l_ports[-1]
 
         # Conecta com o cliente:
         self.conecta_cliente(self.PORTA_ESCUTA)
+
+        # Usando erroneamente a variavel, na verdade a referencia aqui eh para o
+        # meu cliente, e nao para o servidor. Essa linha descobre o nome do
+        # cliente, dado o ip.
+        self.MEU_SERVIDOR = socket.gethostbyaddr(self.clientConn[1][0])[0].split('.')[0]
 
